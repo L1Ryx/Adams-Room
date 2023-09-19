@@ -2,28 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Log : MonoBehaviour
+public class Log : Item
 {
-    [SerializeField] private GameObject bonfireObj;
-    private BonfireManager bm;
-    // Start is called before the first frame update
-    void Start()
+    public override void OnPickup()
     {
-        bm = bonfireObj.GetComponent<BonfireManager>();
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Player"))
+        if (ItemManager.Instance.TryIncrementLogCount())
         {
-            bm.bonfireValue += 5f;
-            Destroy(gameObject);
+            //bm.bonfireValue += 5f;
+            DestroyAndMarkPositionFree();
         }
     }
 
-    // Update is called once per frame
-    void Update()
+    public override bool CanPickUp()
     {
-        
+        return ItemManager.Instance.GetLogCount() < ItemManager.Instance.maxLogs;
+    }
+
+    // Added this new method
+    private void DestroyAndMarkPositionFree()
+    {
+        ItemSpawner.Instance.MarkPositionAsFree((int)gridPosition.x, (int)gridPosition.y);
+        Destroy(gameObject);
     }
 }

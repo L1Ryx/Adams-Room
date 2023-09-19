@@ -9,9 +9,13 @@ public class BonfireManager : MonoBehaviour
     [SerializeField] private Sprite[] bonfireSprites;
     private Animator anim;
     [SerializeField] private GameObject lightSource;
+    [SerializeField] private GameObject smokeSystem;
     public float maxBonfireValue = 40f;
     public float bonfireValue;
     public float decreaseRate = 1f;
+
+    private bool canAddLogs = false;
+    [SerializeField] private GameObject pressFCanvas;
 
     public enum BonfireState
     {
@@ -24,6 +28,7 @@ public class BonfireManager : MonoBehaviour
     private void Awake()
     {
         anim = GetComponent<Animator>();
+        pressFCanvas.SetActive(false);
     }
     void Start()
     {
@@ -36,14 +41,47 @@ public class BonfireManager : MonoBehaviour
     {
         HandleBonfireValue();
         HandleStates();
-        // DEBUGGING BELOW
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        HandleLogAdding();
+    }
+
+    private void HandleLogAdding()
+    {
+        if (canAddLogs && Input.GetKeyDown(KeyCode.F))
         {
-            ChangeState(BonfireState.Lit);
+            AddLogsToFire();
         }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
+        if (ItemManager.Instance.GetLogCount() == 0)
         {
-            ChangeState(BonfireState.Out);
+            pressFCanvas.SetActive(false);
+        }
+    }
+
+    private void AddLogsToFire()
+    {
+        int logsToAdd = ItemManager.Instance.GetLogCount(); // Get the current log count
+        float valueToAdd = logsToAdd * ItemManager.Instance.GetBonfireAddAmount(); // For example, each log adds 5 to bonfireValue
+        AddBonfireValue(valueToAdd);
+        ItemManager.Instance.ResetLogCount(); // Reset the log count
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            canAddLogs = true;
+            if (ItemManager.Instance.GetLogCount() != 0)
+            {
+                pressFCanvas.SetActive(true);
+            }
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            canAddLogs = false;
+            pressFCanvas.SetActive(false);
         }
     }
 
@@ -78,10 +116,13 @@ public class BonfireManager : MonoBehaviour
             case BonfireState.Lit:
                 anim.SetBool("isLit", true);
                 lightSource.SetActive(true);
+                smokeSystem.SetActive(true);
                 break;
             case BonfireState.Out:
                 anim.SetBool("isLit", false);
                 lightSource.SetActive(false);
+                pressFCanvas.SetActive(false);
+                smokeSystem.SetActive(false);
                 break;
         }
     }

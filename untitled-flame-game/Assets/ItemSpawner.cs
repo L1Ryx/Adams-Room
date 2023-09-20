@@ -7,6 +7,7 @@ public class ItemSpawner : MonoBehaviour
 
     public GameObject logPrefab; // Drag your item prefab here in the inspector
     public float spawnInterval = 3.0f; // Time between each spawn in seconds
+    public float intervalIncreaseFactor;
 
     private Vector2 topLeft = new Vector2(-13.5f, 8.5f);
     private Vector2 bottomRight = new Vector2(14.5f, -5.5f);
@@ -54,6 +55,9 @@ public class ItemSpawner : MonoBehaviour
     {
         while (true)
         {
+            float elapsedTime = TimeManager.Instance.GetElapsedTime();
+            spawnInterval = 3.0f + Mathf.Log10(1.0f + elapsedTime / intervalIncreaseFactor);
+
             // Wait for the next spawn interval
             yield return new WaitForSeconds(spawnInterval);
 

@@ -46,7 +46,7 @@ public class BonfireManager : MonoBehaviour
 
     private void HandleLogAdding()
     {
-        if (canAddLogs && Input.GetKeyDown(KeyCode.F))
+        if (canAddLogs && Input.GetKeyDown(KeyCode.F) && currentState == BonfireState.Lit)
         {
             AddLogsToFire();
         }
@@ -96,9 +96,14 @@ public class BonfireManager : MonoBehaviour
         {
             bonfireValue = maxBonfireValue;
         }
-        if (bonfireValue > 0)
+        if (bonfireValue > 0 && EventManager.Instance.currentEvent == EventManager.HazardEvent.None)
         {
             bonfireValue -= Time.deltaTime * decreaseRate;
+        }
+        if (bonfireValue > 0 && (EventManager.Instance.currentEvent == EventManager.HazardEvent.WindLeft ||
+            EventManager.Instance.currentEvent == EventManager.HazardEvent.WindRight))
+        {
+            bonfireValue -= Time.deltaTime * decreaseRate * 1.5f;
         }
     }
 

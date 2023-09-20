@@ -24,6 +24,10 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody2D rb;
     private Animator anim;
 
+    public float windForce = 20f;
+    public bool isUnderWindEffect = false;
+    public Vector2 windDirection;
+
     void Start()
     {
         anim = GetComponent<Animator>();
@@ -70,8 +74,26 @@ public class PlayerMovement : MonoBehaviour
         }
 
         rb.velocity = new Vector2(move.x * moveSpeed, move.y * moveSpeed);
+        if (isUnderWindEffect)
+        {
+            rb.AddForce(windDirection * windForce); // Apply wind effect continuously
+        }
 
         HandleAnim();
+    }
+
+    public void ApplyWindForce(Vector2 direction)
+    {
+        windDirection = direction;
+        isUnderWindEffect = true;
+        StartCoroutine(StopWindEffectAfterDuration());
+    }
+
+    IEnumerator StopWindEffectAfterDuration()
+    {
+        yield return new WaitForSeconds(EventManager.Instance.eventDuration); // 10 seconds duration
+        isUnderWindEffect = false;
+        Debug.Log("Wind effect stopped.");
     }
 
     private void HandleAnim()

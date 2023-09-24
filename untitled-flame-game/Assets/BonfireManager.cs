@@ -96,14 +96,14 @@ public class BonfireManager : MonoBehaviour
         {
             bonfireValue = maxBonfireValue;
         }
-        if (bonfireValue > 0 && EventManager.Instance.currentEvent == EventManager.HazardEvent.None)
-        {
-            bonfireValue -= Time.deltaTime * decreaseRate;
-        }
-        if (bonfireValue > 0 && (EventManager.Instance.currentEvent == EventManager.HazardEvent.WindLeft ||
+        else if (bonfireValue > 0 && (EventManager.Instance.currentEvent == EventManager.HazardEvent.WindLeft ||
             EventManager.Instance.currentEvent == EventManager.HazardEvent.WindRight))
         {
             bonfireValue -= Time.deltaTime * decreaseRate * 1.5f;
+        }
+        else
+        {
+            bonfireValue -= Time.deltaTime * decreaseRate;
         }
     }
 

@@ -11,8 +11,10 @@ public class BlinkingText : MonoBehaviour
     public float startDelay = 1.0f;     // Delay before the blinking starts
     public bool shouldBlink = true;     // Whether the text should blink or not
 
+    [Header("Hazard Messages")]
     [SerializeField] private string windLeftText;
     [SerializeField] private string windRightText;
+    [SerializeField] private string darknessText;
 
     private void Start()
     {
@@ -57,6 +59,9 @@ public class BlinkingText : MonoBehaviour
                 break;
             case EventManager.HazardEvent.WindRight:
                 textElement.text = windRightText;
+                break;
+            case EventManager.HazardEvent.Darkness:
+                textElement.text = darknessText;
                 break;
         }
     }

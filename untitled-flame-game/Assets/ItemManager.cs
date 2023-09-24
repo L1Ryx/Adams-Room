@@ -36,12 +36,9 @@ public class ItemManager : MonoBehaviour
         if (logCount < maxLogs)
         {
             logCount++;
-            Debug.Log("Log count: " + logCount);
             return true; // Increment was successful
         }
-        else
-        {
-            Debug.Log("Maximum log count reached.");
+        else { 
             return false; // Increment failed; max count reached
         }
     }

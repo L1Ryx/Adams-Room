@@ -1,6 +1,8 @@
 // Inside EventManager.cs
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Experimental.Rendering.Universal;
+using UnityEngine.Rendering.Universal;
 
 public class EventManager : MonoBehaviour
 {
@@ -8,11 +10,18 @@ public class EventManager : MonoBehaviour
     [SerializeField] private GameObject player;
     private PlayerMovement pm;
 
+    [Header("Darkness Hazard Settings")]
+    [SerializeField] private GameObject globalLight;
+    [SerializeField] private float originalAmbientIntensity;
+    [SerializeField] private Light2D lightComponent;
+    [SerializeField] private float darknessTransitionTime = 2.5f;
+
     public enum HazardEvent
     {
         None,
         WindLeft,
-        WindRight
+        WindRight,
+        Darkness
     }
 
     public HazardEvent currentEvent;
@@ -38,6 +47,8 @@ public class EventManager : MonoBehaviour
     {
         player = GameObject.FindWithTag("Player");
         pm = player.GetComponent<PlayerMovement>();
+        lightComponent = globalLight.GetComponent<Light2D>();
+        originalAmbientIntensity = lightComponent.intensity;
     }
 
     void Update()
@@ -72,6 +83,10 @@ public class EventManager : MonoBehaviour
                 // Apply wind force to the right
                 pm.ApplyWindForce(Vector2.right);
                 break;
+            case HazardEvent.Darkness:
+                // Apply darkness
+                StartCoroutine(ChangeLightIntensityOverTime(0f, darknessTransitionTime));
+                break;
         }
 
         yield return new WaitForSeconds(eventDuration);
@@ -79,5 +94,21 @@ public class EventManager : MonoBehaviour
         // Reset back to no event
         currentEvent = HazardEvent.None;
         pm.isUnderWindEffect = false;
+        StartCoroutine(ChangeLightIntensityOverTime(originalAmbientIntensity, darknessTransitionTime));
+    }
+
+    private IEnumerator ChangeLightIntensityOverTime(float targetIntensity, float duration)
+    {
+        float startTime = Time.time;
+        float initialIntensity = lightComponent.intensity;
+
+        while (Time.time - startTime < duration)
+        {
+            float elapsed = Time.time - startTime;
+            lightComponent.intensity = Mathf.Lerp(initialIntensity, targetIntensity, elapsed / duration);
+            yield return null;
+        }
+
+        lightComponent.intensity = targetIntensity;
     }
 }

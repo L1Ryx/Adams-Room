@@ -93,7 +93,6 @@ public class PlayerMovement : MonoBehaviour
     {
         yield return new WaitForSeconds(EventManager.Instance.eventDuration); // 10 seconds duration
         isUnderWindEffect = false;
-        Debug.Log("Wind effect stopped.");
     }
 
     private void HandleAnim()

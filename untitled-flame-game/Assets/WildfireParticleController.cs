@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EastWindParticleController : MonoBehaviour
+public class WildfireParticleController : MonoBehaviour
 {
     [SerializeField]
     private ParticleSystem ps; 
@@ -14,14 +14,15 @@ public class EastWindParticleController : MonoBehaviour
 
     void Update()
     {
-        if (EventManager.Instance.currentEvent == EventManager.HazardEvent.WindLeft)
+        if (EventManager.Instance.currentEvent == EventManager.HazardEvent.Wildfire)
         {
             PlayParticles();
         }
-        if (EventManager.Instance.currentEvent != EventManager.HazardEvent.WindLeft)
+        if (EventManager.Instance.currentEvent != EventManager.HazardEvent.Wildfire)
         {
             StopParticles();
         }
+
     }
 
     void PlayParticles()
@@ -33,8 +34,7 @@ public class EastWindParticleController : MonoBehaviour
 
     void StopParticles()
     {
-
-            ps.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+        ps.Stop(true, ParticleSystemStopBehavior.StopEmitting);
 
     }
 }

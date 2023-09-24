@@ -3,7 +3,7 @@ using UnityEngine;
 public class WestWindParticleController : MonoBehaviour
 {
     [SerializeField]
-    private ParticleSystem ps; // Assign your Particle System in the Inspector
+    private ParticleSystem ps; 
 
     private void Awake()
     {

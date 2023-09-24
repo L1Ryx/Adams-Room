@@ -6,22 +6,28 @@ using UnityEngine.Rendering.Universal;
 
 public class EventManager : MonoBehaviour
 {
+    [Header("General Event Settings")]
     public static EventManager Instance;
     [SerializeField] private GameObject player;
     private PlayerMovement pm;
 
-    [Header("Darkness Hazard Settings")]
+    [Header("Lighting Settings")]
     [SerializeField] private GameObject globalLight;
     [SerializeField] private float originalAmbientIntensity;
     [SerializeField] private Light2D lightComponent;
     [SerializeField] private float darknessTransitionTime = 2.5f;
+    [SerializeField] private Color originalLightColor;
+    [SerializeField] private Color wildfireColor;
+    [SerializeField] private float wildfireLightIntensity = 0.4f;
+    [SerializeField] private float wildfireTransitionTime = 2.5f;
 
     public enum HazardEvent
     {
         None,
         WindLeft,
         WindRight,
-        Darkness
+        Darkness,
+        Wildfire
     }
 
     public HazardEvent currentEvent;
@@ -49,6 +55,7 @@ public class EventManager : MonoBehaviour
         pm = player.GetComponent<PlayerMovement>();
         lightComponent = globalLight.GetComponent<Light2D>();
         originalAmbientIntensity = lightComponent.intensity;
+        originalLightColor = lightComponent.color;
     }
 
     void Update()
@@ -87,6 +94,9 @@ public class EventManager : MonoBehaviour
                 // Apply darkness
                 StartCoroutine(ChangeLightIntensityOverTime(0f, darknessTransitionTime));
                 break;
+            case HazardEvent.Wildfire:
+                StartCoroutine(ChangeLightAttributesOverTime(wildfireColor, wildfireLightIntensity, wildfireTransitionTime));
+                break;
         }
 
         yield return new WaitForSeconds(eventDuration);
@@ -94,7 +104,25 @@ public class EventManager : MonoBehaviour
         // Reset back to no event
         currentEvent = HazardEvent.None;
         pm.isUnderWindEffect = false;
-        StartCoroutine(ChangeLightIntensityOverTime(originalAmbientIntensity, darknessTransitionTime));
+        StartCoroutine(ChangeLightAttributesOverTime(originalLightColor, originalAmbientIntensity, wildfireTransitionTime));
+    }
+
+    private IEnumerator ChangeLightAttributesOverTime(Color targetColor, float targetIntensity, float duration)
+    {
+        float startTime = Time.time;
+        Color initialColor = lightComponent.color;
+        float initialIntensity = lightComponent.intensity;
+
+        while (Time.time - startTime < duration)
+        {
+            float elapsed = Time.time - startTime;
+            lightComponent.color = Color.Lerp(initialColor, targetColor, elapsed / duration);
+            lightComponent.intensity = Mathf.Lerp(initialIntensity, targetIntensity, elapsed / duration);
+            yield return null;
+        }
+
+        lightComponent.color = targetColor;
+        lightComponent.intensity = targetIntensity;
     }
 
     private IEnumerator ChangeLightIntensityOverTime(float targetIntensity, float duration)

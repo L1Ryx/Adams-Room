@@ -15,6 +15,7 @@ public class BlinkingText : MonoBehaviour
     [SerializeField] private string windLeftText;
     [SerializeField] private string windRightText;
     [SerializeField] private string darknessText;
+    [SerializeField] private string wildfireText;
 
     private void Start()
     {
@@ -62,6 +63,9 @@ public class BlinkingText : MonoBehaviour
                 break;
             case EventManager.HazardEvent.Darkness:
                 textElement.text = darknessText;
+                break;
+            case EventManager.HazardEvent.Wildfire:
+                textElement.text = wildfireText;
                 break;
         }
     }

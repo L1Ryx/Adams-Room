@@ -94,6 +94,7 @@ GameObject:
   - component: {fileID: 4252479411918985810}
   - component: {fileID: 2480871394007407617}
   - component: {fileID: 6298846532529800177}
+  - component: {fileID: 6454036684364729237}
   m_Layer: 0
   m_Name: Log
   m_TagString: Untagged
@@ -115,7 +116,7 @@ Transform:
   m_Children:
   - {fileID: 4076934146339306533}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &4252479411918985810
 SpriteRenderer:
@@ -217,6 +218,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bonfireObj: {fileID: 0}
+  burnDuration: 5
+  dieAnimationLength: 1.125
+  animator: {fileID: 0}
+  spawnTransitionLength: 0.5
   lightObj: {fileID: 4372907219685916746}
   lightComponent: {fileID: 0}
   originalLightIntensity: 0
+  darknessTransitionTime: 2.5
+--- !u!95 &6454036684364729237
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6608020964058863508}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: c66b579fab96b4ffa8dab7ad9cfed31f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

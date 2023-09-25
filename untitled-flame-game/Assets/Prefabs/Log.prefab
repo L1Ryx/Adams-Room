@@ -218,10 +218,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bonfireObj: {fileID: 0}
+  woodCollectIdxLow: 4
+  woodCollectIdxHigh: 6
+  woodCollectVolume: 0.3
   burnDuration: 5
   dieAnimationLength: 1.125
+  isDying: 0
   animator: {fileID: 0}
   spawnTransitionLength: 0.5
+  isIdle: 0
   lightObj: {fileID: 4372907219685916746}
   lightComponent: {fileID: 0}
   originalLightIntensity: 0

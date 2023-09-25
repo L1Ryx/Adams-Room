@@ -17,6 +17,15 @@ public class BonfireManager : MonoBehaviour
     private bool canAddLogs = false;
     [SerializeField] private GameObject pressFCanvas;
 
+    [Header("SFX")]
+    [SerializeField] private int logClipIdxLow = 0;
+    [SerializeField] private int logClipIdxHigh = 1;
+    [SerializeField] private float volume = 0.3f;
+
+    [Header("Campfire Ambiance")]
+    [SerializeField] private AudioSource audioSource;
+
+
     public enum BonfireState
     {
         Lit,
@@ -29,6 +38,7 @@ public class BonfireManager : MonoBehaviour
     {
         anim = GetComponent<Animator>();
         pressFCanvas.SetActive(false);
+        audioSource = GetComponent<AudioSource>();
     }
     void Start()
     {
@@ -58,7 +68,13 @@ public class BonfireManager : MonoBehaviour
 
     private void AddLogsToFire()
     {
+        
         int logsToAdd = ItemManager.Instance.GetLogCount(); // Get the current log count
+        if (logsToAdd > 0)
+        {
+            int addLogClipIdx = UnityEngine.Random.Range(logClipIdxLow, logClipIdxHigh + 1);
+            SFXManager.Instance.PlaySFX(addLogClipIdx, volume);
+        }
         float valueToAdd = logsToAdd * ItemManager.Instance.GetBonfireAddAmount(); // For example, each log adds 5 to bonfireValue
         AddBonfireValue(valueToAdd);
         ItemManager.Instance.ResetLogCount(); // Reset the log count
@@ -122,12 +138,21 @@ public class BonfireManager : MonoBehaviour
                 anim.SetBool("isLit", true);
                 lightSource.SetActive(true);
                 smokeSystem.SetActive(true);
+                if (!audioSource.isPlaying)
+                {
+                    audioSource.Pause();
+                    audioSource.Play();
+                }
                 break;
             case BonfireState.Out:
                 anim.SetBool("isLit", false);
                 lightSource.SetActive(false);
                 pressFCanvas.SetActive(false);
                 smokeSystem.SetActive(false);
+                if (audioSource.isPlaying)
+                {
+                    audioSource.Pause();
+                }
                 break;
         }
     }

@@ -28,6 +28,10 @@ public class PlayerMovement : MonoBehaviour
     public bool isUnderWindEffect = false;
     public Vector2 windDirection;
 
+    [Header("StepSFX")]
+    [SerializeField] private float stepTime = 0.3f;
+    private float nextStepTime;
+
     void Start()
     {
         anim = GetComponent<Animator>();
@@ -47,7 +51,25 @@ public class PlayerMovement : MonoBehaviour
             move.Normalize();
         }
 
-        // Change state based on movement
+        ChangeStateBasedOnMovement(moveX, moveY);
+
+        rb.velocity = new Vector2(move.x * moveSpeed, move.y * moveSpeed);
+        if (isUnderWindEffect)
+        {
+            rb.AddForce(windDirection * windForce); // Apply wind effect continuously
+        }
+
+        HandleAnim();
+
+        if (IsWalking() && Time.time >= nextStepTime)
+        {
+            SFXManager.Instance.PlayFootstepSound(transform.position); // Play footstep sound at player’s position
+            nextStepTime = Time.time + stepTime; // Schedule the next footstep sound
+        }
+    }
+
+    private void ChangeStateBasedOnMovement(float moveX, float moveY)
+    {
         if (moveX > 0)
         {
             ChangeState(PlayerState.WalkingRight);
@@ -72,14 +94,15 @@ public class PlayerMovement : MonoBehaviour
         {
             ChangeState(lastDirection);
         }
+    }
 
-        rb.velocity = new Vector2(move.x * moveSpeed, move.y * moveSpeed);
-        if (isUnderWindEffect)
-        {
-            rb.AddForce(windDirection * windForce); // Apply wind effect continuously
-        }
-
-        HandleAnim();
+    // Check if the player is in a walking state
+    private bool IsWalking()
+    {
+        return currentState == PlayerState.WalkingLeft ||
+               currentState == PlayerState.WalkingRight ||
+               currentState == PlayerState.WalkingUp ||
+               currentState == PlayerState.WalkingDown;
     }
 
     public void ApplyWindForce(Vector2 direction)

@@ -36,6 +36,11 @@ public class EventManager : MonoBehaviour
 
     private float timeOfLastEvent;
 
+    [Header("SFX")]
+    [SerializeField] private int basicAmbianceIndex = 0;
+    [SerializeField] private int wildfireAmbianceIndex = 1;
+    [SerializeField] private int windAmbianceIndex = 2;
+
     void Awake()
     {
         // Singleton Initialization
@@ -47,10 +52,12 @@ public class EventManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        
     }
 
     private void Start()
     {
+        
         player = GameObject.FindWithTag("Player");
         pm = player.GetComponent<PlayerMovement>();
         lightComponent = globalLight.GetComponent<Light2D>();
@@ -82,12 +89,12 @@ public class EventManager : MonoBehaviour
         switch (currentEvent)
         {
             case HazardEvent.WindLeft:
-                // Apply wind force to the left
+                AmbianceManager.Instance.PlayAmbiance(windAmbianceIndex);
                 pm.ApplyWindForce(Vector2.left);
                 break;
 
             case HazardEvent.WindRight:
-                // Apply wind force to the right
+                AmbianceManager.Instance.PlayAmbiance(windAmbianceIndex);
                 pm.ApplyWindForce(Vector2.right);
                 break;
             case HazardEvent.Darkness:
@@ -95,7 +102,11 @@ public class EventManager : MonoBehaviour
                 StartCoroutine(ChangeLightIntensityOverTime(0f, darknessTransitionTime));
                 break;
             case HazardEvent.Wildfire:
+                AmbianceManager.Instance.PlayAmbiance(wildfireAmbianceIndex); 
                 StartCoroutine(ChangeLightAttributesOverTime(wildfireColor, wildfireLightIntensity, wildfireTransitionTime));
+                break;
+            default:
+                AmbianceManager.Instance.PlayAmbiance(basicAmbianceIndex);
                 break;
         }
 
@@ -104,6 +115,7 @@ public class EventManager : MonoBehaviour
         // Reset back to no event
         currentEvent = HazardEvent.None;
         pm.isUnderWindEffect = false;
+        AmbianceManager.Instance.PlayAmbiance(basicAmbianceIndex);
         StartCoroutine(ChangeLightAttributesOverTime(originalLightColor, originalAmbientIntensity, wildfireTransitionTime));
     }
 

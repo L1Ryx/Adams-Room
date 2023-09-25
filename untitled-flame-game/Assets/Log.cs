@@ -5,6 +5,11 @@ using UnityEngine.Rendering.Universal;
 
 public class Log : Item
 {
+    [Header("SFX")]
+    [SerializeField] private int woodCollectIdxLow = 4;
+    [SerializeField] private int woodCollectIdxHigh = 7;
+    [SerializeField] private float woodCollectVolume = 0.4f;
+
     [Header("Burn Settings")]
     [SerializeField] private float burnDuration = 5f; // Example duration
     [SerializeField] private float dieAnimationLength = 1.125f; // Example duration
@@ -122,7 +127,8 @@ public class Log : Item
     {
         if (ItemManager.Instance.TryIncrementLogCount())
         {
-            //bm.bonfireValue += 5f;
+            int woodCollectIdx = UnityEngine.Random.Range(woodCollectIdxLow, woodCollectIdxHigh + 1);
+            SFXManager.Instance.PlaySFX(woodCollectIdx, woodCollectVolume);
             DestroyAndMarkPositionFree();
         }
     }

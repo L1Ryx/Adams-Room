@@ -17,6 +17,11 @@ public class BlinkingText : MonoBehaviour
     [SerializeField] private string darknessText;
     [SerializeField] private string wildfireText;
 
+    [Header("Color Values")]
+    [SerializeField] private float colorRed;
+    [SerializeField] private float colorGreen;
+    [SerializeField] private float colorBlue;
+
     private void Start()
     {
         if (textElement == null)
@@ -41,7 +46,8 @@ public class BlinkingText : MonoBehaviour
         {
             // Lerp alpha from 0 to 1 and then from 1 to 0
             float lerpTime = Mathf.PingPong(Time.time * blinkSpeed, 1);
-            Color lerpedColor = Color.Lerp(new Color(1, 1, 1, 0), new Color(1, 1, 1, 1), lerpTime);
+            Color lerpedColor = Color.Lerp(new Color(colorRed / 255, colorGreen / 255, colorBlue / 255, 0),
+                new Color(colorRed / 255, colorGreen / 255, colorBlue / 255, 1), lerpTime);
 
             textElement.color = lerpedColor;
             yield return null;

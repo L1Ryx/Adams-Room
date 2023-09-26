@@ -9,6 +9,7 @@ public class TimeManager : MonoBehaviour
 
     void Awake()
     {
+        isPaused = false;
         // Singleton Initialization
         if (Instance == null)
         {
@@ -19,8 +20,7 @@ public class TimeManager : MonoBehaviour
             Destroy(gameObject);
         }
 
-        // Optionally, make this object persist across scenes
-        // DontDestroyOnLoad(gameObject);
+        DontDestroyOnLoad(gameObject);
     }
 
     // Update is called once per frame
@@ -29,6 +29,11 @@ public class TimeManager : MonoBehaviour
         if (!isPaused)
         {
             elapsedTime += Time.deltaTime;
+            Time.timeScale = 1;
+        }
+        if (isPaused)
+        {
+            Time.timeScale = 0;
         }
     }
 
@@ -54,5 +59,10 @@ public class TimeManager : MonoBehaviour
     public void ResumeTimer()
     {
         isPaused = false;
+    }
+
+    public bool IsPaused()
+    {
+        return isPaused;
     }
 }

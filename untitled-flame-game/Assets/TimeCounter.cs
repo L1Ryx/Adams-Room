@@ -8,6 +8,9 @@ public class TimeCounter : MonoBehaviour
     [SerializeField] private GameObject scoreTextObj;
     private TextMeshProUGUI tmp;
 
+    [Header("Ambiance")]
+    [SerializeField] private int clipIdx = 0;
+
     private void Awake()
     {
         tmp = scoreTextObj.GetComponent<TextMeshProUGUI>();
@@ -15,7 +18,7 @@ public class TimeCounter : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        AmbianceManager.Instance.PlayAmbiance(clipIdx, 0.3f);
     }
 
     // Update is called once per frame

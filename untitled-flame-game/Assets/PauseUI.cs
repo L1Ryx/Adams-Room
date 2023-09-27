@@ -24,6 +24,7 @@ public class PauseUI : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
+            PlayPauseUISFX();
             if (TimeManager.Instance.IsPaused())
             {
                 ResumeGame();
@@ -50,6 +51,11 @@ public class PauseUI : MonoBehaviour
     public void PauseGame()
     {
         TimeManager.Instance.PauseTimer();
+    }
+
+    public void PlayPauseUISFX()
+    {
+        SFXManager.Instance.PlaySFX(SFXManager.Instance.uiClickIdx, SFXManager.Instance.uiClickVolume);
     }
 
     public void ResumeGame()

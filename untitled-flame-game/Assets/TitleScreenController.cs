@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Collections;
 using TMPro;
+using UnityEditor;
 
 public class TitleScreenManager : MonoBehaviour
 {
@@ -17,9 +18,13 @@ public class TitleScreenManager : MonoBehaviour
     private float alphaValue = 0; // For fading effect.
     private bool fadeIn = true; // To check if text is fading in or out.
 
+    [SerializeField] private ScoreReportText srt;
+
     [Header("Ambiance")]
     [SerializeField] private int clipIdx = 3;
     [SerializeField] private float titleAmbianceVolume = 0.7f;
+
+   
 
     void Start()
     {
@@ -27,6 +32,14 @@ public class TitleScreenManager : MonoBehaviour
         AmbianceManager.Instance.PlayAmbiance(clipIdx, titleAmbianceVolume);
         tmp = startText.GetComponent<TextMeshProUGUI>();
         startText.gameObject.SetActive(false); // Initially set to false.
+
+       
+        if (TimeManager.Instance.shouldShowResults)
+        {
+            Debug.Log("You survived for " + TimeManager.Instance.score);
+            Debug.Log("Your best time is " + HighScoreManager.Instance.GetHighScore());
+        } 
+
         StartCoroutine(EnableStart());
     }
 
@@ -36,6 +49,22 @@ public class TitleScreenManager : MonoBehaviour
         canStart = true; // Enable start
         startText.SetActive(true); // Display blinking text
         StartCoroutine(FadeText());
+    }
+
+    public void QuitApplication()
+    {
+#if UNITY_EDITOR
+        // If running in the editor, stop play mode
+        EditorApplication.isPlaying = false;
+#else
+        // If running outside the editor, quit the application
+        Application.Quit();
+#endif
+    }
+
+    public void PlayQuitUIClick()
+    {
+        SFXManager.Instance.PlaySFX(SFXManager.Instance.uiClickIdx, SFXManager.Instance.uiClickVolume);
     }
 
     private IEnumerator FadeText()
@@ -60,12 +89,26 @@ public class TitleScreenManager : MonoBehaviour
 
     void Update()
     {
-        if (canStart && Input.anyKey && !isStarting) // If user is allowed to start and any key is pressed
+        if (canStart && IsAnyKey() && !isStarting) // If user is allowed to start and any key is pressed
         {
             isStarting = true;
             AmbianceManager.Instance.FadeOutAndDestroyAll();
             FadeManager.Instance.LoadSceneWithFade(sceneLoadName, false);
             isStarting = false;
         }
+    }
+
+    bool IsAnyKey()
+    {
+        foreach (KeyCode keyCode in System.Enum.GetValues(typeof(KeyCode)))
+        {
+            // Exclude mouse button key codes.
+            if ((int)keyCode >= (int)KeyCode.Mouse0 && (int)keyCode <= (int)KeyCode.Mouse6)
+                continue;
+
+            if (Input.GetKey(keyCode))
+                return true;
+        }
+        return false;
     }
 }

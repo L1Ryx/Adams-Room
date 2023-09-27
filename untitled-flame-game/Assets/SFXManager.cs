@@ -10,6 +10,10 @@ public class SFXManager : MonoBehaviour
     [SerializeField] private AudioClip[] footstepSounds;
     [SerializeField] private float footstepVolume = 0.8f;
 
+    [Header("UI")]
+    public int uiClickIdx = 7;
+    public float uiClickVolume = 0.8f;
+
     private void Awake()
     {
         if (Instance == null)

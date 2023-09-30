@@ -9,7 +9,7 @@ public class TimeManager : MonoBehaviour
     [SerializeField] private bool isPaused = false; // Is the timer paused?
 
     [Header("Gameplay")]
-    public bool shouldShowResults;
+    public bool shouldShowResults = false;
     public bool transitioningToResults = false;
     [SerializeField] private string sceneToLoad = "StartScene";
 

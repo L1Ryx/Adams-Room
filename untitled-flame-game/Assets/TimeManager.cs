@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TimeManager : MonoBehaviour
 {
@@ -9,6 +10,9 @@ public class TimeManager : MonoBehaviour
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> parent of e7d086423 (attempt)
     [Header("Gameplay")]
     public bool shouldShowResults;
     public bool transitioningToResults = false;
@@ -17,37 +21,74 @@ public class TimeManager : MonoBehaviour
     [Header("Score")]
     public int score;
 
+<<<<<<< HEAD
 =======
 >>>>>>> parent of 13b62ff7a (first build)
 =======
 >>>>>>> parent of 13b62ff7a (first build)
+=======
+>>>>>>> parent of e7d086423 (attempt)
     void Awake()
     {
-        isPaused = false;
         // Singleton Initialization
         if (Instance == null)
         {
             Instance = this;
+            DontDestroyOnLoad(gameObject);
         }
         else if (Instance != this)
         {
+            shouldShowResults = Instance.shouldShowResults;
+            transitioningToResults = Instance.transitioningToResults;
             Destroy(gameObject);
         }
+        SceneManager.sceneLoaded += SceneManager_sceneLoaded;
+        // Optionally, make this object persist across scenes
+        // DontDestroyOnLoad(gameObject);
+    }
 
-        DontDestroyOnLoad(gameObject);
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= SceneManager_sceneLoaded;
+    }
+
+    private void SceneManager_sceneLoaded(Scene arg0, LoadSceneMode arg1)
+    {
+        ResetElapsedTime();
+    }
+
+    private void Start()
+    {
+        shouldShowResults = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!isPaused)
+        if (!isPaused && !shouldShowResults)
         {
             elapsedTime += Time.deltaTime;
-            Time.timeScale = 1;
         }
+        HandleDeath();
+
         if (isPaused)
         {
             Time.timeScale = 0;
+        }
+        else
+        {
+            Time.timeScale = 1;
+        }
+    }
+
+    private void HandleDeath()
+    {
+        if (shouldShowResults && !transitioningToResults)
+        {
+            transitioningToResults = true;
+            score = Mathf.FloorToInt(elapsedTime);
+            HighScoreManager.Instance.SetHighScore(score);
+            FadeManager.Instance.LoadSceneWithFade(sceneToLoad, false);
         }
     }
 

@@ -825,6 +825,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreTextObj: {fileID: 4862592946331741178}
+  clipIdx: 0
 --- !u!1 &3685404097939610962
 GameObject:
   m_ObjectHideFlags: 0
@@ -1005,11 +1006,14 @@ MonoBehaviour:
   wildfireLightIntensity: 0.4
   wildfireTransitionTime: 2.5
   currentEvent: 0
-  eventDuration: 15
-  timeUntilNextEvent: 30
+  eventDuration: 14
+  timeUntilNextEvent: 28
   basicAmbianceIndex: 0
   wildfireAmbianceIndex: 1
   windAmbianceIndex: 2
+  basicAmbianceVolume: 0.5
+  wildfireAmbianceVolume: 0.4
+  windAmbianceVolume: 0.4
 --- !u!1 &4862592946331741178
 GameObject:
   m_ObjectHideFlags: 0
@@ -1320,8 +1324,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 60
-  m_fontSizeBase: 60
+  m_fontSize: 48
+  m_fontSizeBase: 48
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1686,6 +1690,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 7123277626286665495}
+        m_TargetAssemblyTypeName: PauseUI, Assembly-CSharp
+        m_MethodName: PlayPauseUISFX
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &6297983557731890657
 GameObject:
   m_ObjectHideFlags: 0
@@ -1750,7 +1766,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4338348889277315046
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1921,13 +1937,12 @@ Transform:
   - {fileID: 4661072640206690735}
   - {fileID: 5773406313733749358}
   - {fileID: 2645647913574301712}
-  - {fileID: 2783441791230275748}
   - {fileID: 8255110174682019759}
   - {fileID: 3026959378585977773}
   - {fileID: 7939630073795552194}
   - {fileID: 5957458460212162059}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7208638769113060929
 GameObject:
@@ -7051,8 +7066,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -24, y: -168.845}
-  m_SizeDelta: {x: 415.339, y: 116.186}
+  m_AnchoredPosition: {x: -28, y: -198}
+  m_SizeDelta: {x: 352.684, y: 98.659}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8921857712643013509
 CanvasRenderer:
@@ -7139,6 +7154,18 @@ MonoBehaviour:
       - m_Target: {fileID: 7123277626286665495}
         m_TargetAssemblyTypeName: PauseUI, Assembly-CSharp
         m_MethodName: ResumeGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 7123277626286665495}
+        m_TargetAssemblyTypeName: PauseUI, Assembly-CSharp
+        m_MethodName: PlayPauseUISFX
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7261,8 +7288,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -24, y: -318}
-  m_SizeDelta: {x: 415.339, y: 116.186}
+  m_AnchoredPosition: {x: -28.7, y: -329.405}
+  m_SizeDelta: {x: 355, y: 99.307}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1052333108004839535
 CanvasRenderer:
@@ -7345,7 +7372,31 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6503798024256738017}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 7123277626286665495}
+        m_TargetAssemblyTypeName: PauseUI, Assembly-CSharp
+        m_MethodName: ExitLevel
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 7123277626286665495}
+        m_TargetAssemblyTypeName: PauseUI, Assembly-CSharp
+        m_MethodName: PlayPauseUISFX
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &8534356335130129197
 GameObject:
   m_ObjectHideFlags: 0
@@ -7583,8 +7634,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 60
-  m_fontSizeBase: 60
+  m_fontSize: 48
+  m_fontSizeBase: 48
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -7701,72 +7752,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!1001 &68891286703846367
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 751804822039211148}
-    m_Modifications:
-    - target: {fileID: 894174528538227491, guid: 97450675140ed49208695bfc297e86fc, type: 3}
-      propertyPath: m_Name
-      value: TimeManager
-      objectReference: {fileID: 0}
-    - target: {fileID: 2761838851446784891, guid: 97450675140ed49208695bfc297e86fc, type: 3}
-      propertyPath: m_RootOrder
-      value: -1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2761838851446784891, guid: 97450675140ed49208695bfc297e86fc, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2761838851446784891, guid: 97450675140ed49208695bfc297e86fc, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2761838851446784891, guid: 97450675140ed49208695bfc297e86fc, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2761838851446784891, guid: 97450675140ed49208695bfc297e86fc, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2761838851446784891, guid: 97450675140ed49208695bfc297e86fc, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2761838851446784891, guid: 97450675140ed49208695bfc297e86fc, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2761838851446784891, guid: 97450675140ed49208695bfc297e86fc, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2761838851446784891, guid: 97450675140ed49208695bfc297e86fc, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2761838851446784891, guid: 97450675140ed49208695bfc297e86fc, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2761838851446784891, guid: 97450675140ed49208695bfc297e86fc, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 97450675140ed49208695bfc297e86fc, type: 3}
---- !u!4 &2783441791230275748 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2761838851446784891, guid: 97450675140ed49208695bfc297e86fc, type: 3}
-  m_PrefabInstance: {fileID: 68891286703846367}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2334598853362146990
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7822,6 +7807,22 @@ PrefabInstance:
     - target: {fileID: 3710263080063903405, guid: ba6a3a04ef44d4c2e8147f0a61d33d2e, type: 3}
       propertyPath: m_Name
       value: FadeManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 7976710789579461007, guid: ba6a3a04ef44d4c2e8147f0a61d33d2e, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 2128.241
+      objectReference: {fileID: 0}
+    - target: {fileID: 7976710789579461007, guid: ba6a3a04ef44d4c2e8147f0a61d33d2e, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 1387.367
+      objectReference: {fileID: 0}
+    - target: {fileID: 7976710789579461007, guid: ba6a3a04ef44d4c2e8147f0a61d33d2e, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -21.421
+      objectReference: {fileID: 0}
+    - target: {fileID: 7976710789579461007, guid: ba6a3a04ef44d4c2e8147f0a61d33d2e, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 20.372
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -7885,6 +7886,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4505246321613044871, guid: 911d6ebeaead44f008bf8f64fc2fb4d0, type: 3}
+      propertyPath: uiClickIdx
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4505246321613044871, guid: 911d6ebeaead44f008bf8f64fc2fb4d0, type: 3}
+      propertyPath: footstepVolume
+      value: 0.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 4505246321613044871, guid: 911d6ebeaead44f008bf8f64fc2fb4d0, type: 3}
+      propertyPath: audioClips.Array.data[5]
+      value: 
+      objectReference: {fileID: 8300000, guid: a5ab0b77ef7e24a81961cb85ad198e4d, type: 3}
+    - target: {fileID: 4505246321613044871, guid: 911d6ebeaead44f008bf8f64fc2fb4d0, type: 3}
+      propertyPath: audioClips.Array.data[6]
+      value: 
+      objectReference: {fileID: 8300000, guid: 5c71ab000125f475ba64e35851fe2b27, type: 3}
+    - target: {fileID: 4505246321613044871, guid: 911d6ebeaead44f008bf8f64fc2fb4d0, type: 3}
+      propertyPath: audioClips.Array.data[7]
+      value: 
+      objectReference: {fileID: 8300000, guid: 088a9326f5e394fe88a078d7b9db7680, type: 3}
     - target: {fileID: 8479414284800324933, guid: 911d6ebeaead44f008bf8f64fc2fb4d0, type: 3}
       propertyPath: m_Name
       value: SFXManager

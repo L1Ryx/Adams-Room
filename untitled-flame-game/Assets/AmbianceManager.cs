@@ -1,7 +1,5 @@
 using UnityEngine;
 using System.Collections;
-using UnityEditor.Experimental.GraphView;
-using UnityEngine.UIElements.Experimental;
 
 public class AmbianceManager : MonoBehaviour
 {

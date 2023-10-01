@@ -8,6 +8,7 @@ public class TimeManager : MonoBehaviour
     [SerializeField] private bool isPaused = false; // Is the timer paused?
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     [Header("Gameplay")]
     public bool shouldShowResults = false;
     public bool transitioningToResults = false;
@@ -16,6 +17,8 @@ public class TimeManager : MonoBehaviour
     [Header("Score")]
     public int score;
 
+=======
+>>>>>>> parent of 13b62ff7a (first build)
 =======
 >>>>>>> parent of 13b62ff7a (first build)
     void Awake()

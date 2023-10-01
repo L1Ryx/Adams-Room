@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class TimeManager : MonoBehaviour
 {
@@ -8,6 +7,7 @@ public class TimeManager : MonoBehaviour
     [SerializeField] private float elapsedTime = 0.0f; // Time elapsed since the start of the level
     [SerializeField] private bool isPaused = false; // Is the timer paused?
 
+<<<<<<< HEAD
     [Header("Gameplay")]
     public bool shouldShowResults = false;
     public bool transitioningToResults = false;
@@ -16,67 +16,35 @@ public class TimeManager : MonoBehaviour
     [Header("Score")]
     public int score;
 
+=======
+>>>>>>> parent of 13b62ff7a (first build)
     void Awake()
     {
+        isPaused = false;
         // Singleton Initialization
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else if (Instance != this)
         {
-            shouldShowResults = Instance.shouldShowResults;
-            transitioningToResults = Instance.transitioningToResults;
             Destroy(gameObject);
         }
-        SceneManager.sceneLoaded += SceneManager_sceneLoaded;
-        // Optionally, make this object persist across scenes
-        // DontDestroyOnLoad(gameObject);
-    }
 
-    private void OnDestroy()
-    {
-        SceneManager.sceneLoaded -= SceneManager_sceneLoaded;
-    }
-
-    private void SceneManager_sceneLoaded(Scene arg0, LoadSceneMode arg1)
-    {
-        ResetElapsedTime();
-    }
-
-    private void Start()
-    {
-        shouldShowResults = false;
+        DontDestroyOnLoad(gameObject);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!isPaused && !shouldShowResults)
+        if (!isPaused)
         {
             elapsedTime += Time.deltaTime;
+            Time.timeScale = 1;
         }
-        HandleDeath();
-
         if (isPaused)
         {
             Time.timeScale = 0;
-        }
-        else
-        {
-            Time.timeScale = 1;
-        }
-    }
-
-    private void HandleDeath()
-    {
-        if (shouldShowResults && !transitioningToResults)
-        {
-            transitioningToResults = true;
-            score = Mathf.FloorToInt(elapsedTime);
-            HighScoreManager.Instance.SetHighScore(score);
-            FadeManager.Instance.LoadSceneWithFade(sceneToLoad, false);
         }
     }
 

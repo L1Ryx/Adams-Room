@@ -30,7 +30,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4505246321613044871
 MonoBehaviour:
@@ -50,13 +50,11 @@ MonoBehaviour:
   - {fileID: 8300000, guid: cf60f990bcaa145969b8318f97fd5bab, type: 3}
   - {fileID: 8300000, guid: 766bcee5186324e97ba9596649510998, type: 3}
   - {fileID: 8300000, guid: e203e476372b34baeb224b9d33665fab, type: 3}
-  - {fileID: 8300000, guid: a5ab0b77ef7e24a81961cb85ad198e4d, type: 3}
   - {fileID: 8300000, guid: 5c71ab000125f475ba64e35851fe2b27, type: 3}
+  - {fileID: 8300000, guid: a5ab0b77ef7e24a81961cb85ad198e4d, type: 3}
   footstepSounds:
   - {fileID: 8300000, guid: 2ca968096abed4f11988898d2ceb466d, type: 3}
   - {fileID: 8300000, guid: a2cfb5f080e0e4581b4760d647676bac, type: 3}
   - {fileID: 8300000, guid: 0ac7e9e56126c4b84a02f81236a0b7fd, type: 3}
   - {fileID: 8300000, guid: ff80fb7eb56284003b39165e8f9388ef, type: 3}
   footstepVolume: 0.8
-  uiClickIdx: 6
-  uiClickVolume: 0.8

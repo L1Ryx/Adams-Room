@@ -219,8 +219,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bonfireObj: {fileID: 0}
   woodCollectIdxLow: 4
-  woodCollectIdxHigh: 5
-  woodCollectVolume: 0.5
+  woodCollectIdxHigh: 6
+  woodCollectVolume: 0.3
   burnDuration: 5
   dieAnimationLength: 1.125
   isDying: 0

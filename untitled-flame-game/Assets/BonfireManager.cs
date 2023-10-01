@@ -20,7 +20,7 @@ public class BonfireManager : MonoBehaviour
     [Header("SFX")]
     [SerializeField] private int logClipIdxLow = 0;
     [SerializeField] private int logClipIdxHigh = 1;
-    [SerializeField] private float volume = 0.5f;
+    [SerializeField] private float volume = 0.3f;
 
     [Header("Campfire Ambiance")]
     [SerializeField] private AudioSource audioSource;
@@ -153,7 +153,6 @@ public class BonfireManager : MonoBehaviour
                 {
                     audioSource.Pause();
                 }
-                TimeManager.Instance.shouldShowResults = true;
                 break;
         }
     }

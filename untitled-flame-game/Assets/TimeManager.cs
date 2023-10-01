@@ -8,11 +8,6 @@ public class TimeManager : MonoBehaviour
     [SerializeField] private float elapsedTime = 0.0f; // Time elapsed since the start of the level
     [SerializeField] private bool isPaused = false; // Is the timer paused?
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> parent of e7d086423 (attempt)
     [Header("Gameplay")]
     public bool shouldShowResults;
     public bool transitioningToResults = false;
@@ -21,13 +16,6 @@ public class TimeManager : MonoBehaviour
     [Header("Score")]
     public int score;
 
-<<<<<<< HEAD
-=======
->>>>>>> parent of 13b62ff7a (first build)
-=======
->>>>>>> parent of 13b62ff7a (first build)
-=======
->>>>>>> parent of e7d086423 (attempt)
     void Awake()
     {
         // Singleton Initialization

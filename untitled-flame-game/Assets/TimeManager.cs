@@ -10,7 +10,7 @@ public class TimeManager : MonoBehaviour
 <<<<<<< HEAD
 <<<<<<< HEAD
     [Header("Gameplay")]
-    public bool shouldShowResults = false;
+    public bool shouldShowResults;
     public bool transitioningToResults = false;
     [SerializeField] private string sceneToLoad = "StartScene";
 

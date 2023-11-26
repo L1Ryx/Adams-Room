@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6120745668150948116
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1596982458549864144}
+  - component: {fileID: 2294713979397863638}
+  m_Layer: 0
+  m_Name: SFXManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1596982458549864144
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6120745668150948116}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2294713979397863638
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6120745668150948116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80522bc1f8397409395babfe34b261fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioClips:
+  - {fileID: 8300000, guid: 2f3a882be525a4df4b4b43b4a94ec265, type: 3}
+  - {fileID: 8300000, guid: eeef1b372c14f4795899b175177d7f22, type: 3}
+  - {fileID: 8300000, guid: cf60f990bcaa145969b8318f97fd5bab, type: 3}
+  - {fileID: 8300000, guid: 766bcee5186324e97ba9596649510998, type: 3}
+  - {fileID: 8300000, guid: e203e476372b34baeb224b9d33665fab, type: 3}
+  - {fileID: 8300000, guid: a5ab0b77ef7e24a81961cb85ad198e4d, type: 3}
+  - {fileID: 8300000, guid: a1c99bb12751f4e9f8fe9447201dc3df, type: 3}
+  - {fileID: 8300000, guid: 1bf5d4ff76d544066a03143a4ccfe9e7, type: 3}
+  - {fileID: 8300000, guid: 5a4438ee0352844cf9ec7b236cc54dd8, type: 3}
+  footstepSounds:
+  - {fileID: 8300000, guid: 2ca968096abed4f11988898d2ceb466d, type: 3}
+  - {fileID: 8300000, guid: a2cfb5f080e0e4581b4760d647676bac, type: 3}
+  - {fileID: 8300000, guid: 0ac7e9e56126c4b84a02f81236a0b7fd, type: 3}
+  - {fileID: 8300000, guid: ff80fb7eb56284003b39165e8f9388ef, type: 3}
+  footstepVolume: 0.8
+  uiClickIdx: 6
+  uiClickVolume: 0.8

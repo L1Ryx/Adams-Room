@@ -49,9 +49,10 @@ MonoBehaviour:
   - {fileID: 8300000, guid: a7c0f33486ade477696196529ef6dec9, type: 3}
   - {fileID: 8300000, guid: 0a7ef8cdd0b8b4dd29f21f15066cca26, type: 3}
   - {fileID: 8300000, guid: 785a25ece6c3c4d26a146f2d979efb88, type: 3}
-  - {fileID: 8300000, guid: 7e791afd566ce4f4f9969b75ba0e617d, type: 3}
+  - {fileID: 8300000, guid: 05ff3af7b1ed5446a847de1ea99ea9e0, type: 3}
   audioSourcePrefab: {fileID: 872838948580461618, guid: 6134ea06350e64770874e6da86ead68c, type: 3}
   fadeTime: 1.5
+  leadTime: 2
 --- !u!82 &6620950755464311123
 AudioSource:
   m_ObjectHideFlags: 0

@@ -149,13 +149,19 @@ public class BonfireManager : MonoBehaviour
                 lightSource.SetActive(false);
                 pressFCanvas.SetActive(false);
                 smokeSystem.SetActive(false);
-                if (audioSource.isPlaying)
-                {
-                    audioSource.Pause();
-                }
-                TimeManager.Instance.shouldShowResults = true;
+                EndGame();
                 break;
         }
+    }
+
+    private void EndGame()
+    {
+        if (audioSource.isPlaying)
+        {
+            audioSource.Pause();
+        }
+        AmbianceManager.Instance.FadeOutAndDestroyAll();
+        TimeManager.Instance.shouldShowResults = true;
     }
 
     public void ChangeState(BonfireState newState)

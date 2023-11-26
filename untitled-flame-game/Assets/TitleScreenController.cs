@@ -22,7 +22,7 @@ public class TitleScreenManager : MonoBehaviour
 
     [Header("Ambiance")]
     [SerializeField] private int clipIdx = 3;
-    [SerializeField] private float titleAmbianceVolume = 0.7f;
+    [SerializeField] private float titleAmbianceVolume = 0.95f;
 
    
 

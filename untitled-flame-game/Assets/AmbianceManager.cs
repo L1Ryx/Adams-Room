@@ -6,10 +6,12 @@ public class AmbianceManager : MonoBehaviour
     public static AmbianceManager Instance;
 
     [SerializeField] private AudioClip[] ambianceClips;
-    [SerializeField] private GameObject audioSourcePrefab; // Assume you have an AudioSource prefab
+    [SerializeField] private GameObject audioSourcePrefab;
     [SerializeField] private float fadeTime = 2.0f;
+    [SerializeField] private float leadTime = 2.0f;
 
-    [SerializeField] private AudioSource currentAudioSource;
+    private AudioSource currentAudioSource;
+    private AudioSource nextAudioSource;
 
     void Awake()
     {
@@ -22,7 +24,6 @@ public class AmbianceManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        
     }
 
     void Start()
@@ -31,13 +32,6 @@ public class AmbianceManager : MonoBehaviour
         {
             clip.LoadAudioData();
         }
-        // Initialize with an AudioSource playing the first clip
-        //currentAudioSource = Instantiate(audioSourcePrefab, transform).GetComponent<AudioSource>();
-        //if (currentAudioSource.clip == null)
-        //{
-        //    currentAudioSource.clip = ambianceClips[0];
-        //}
-        //currentAudioSource.Play();
     }
 
     public void PlayAmbiance(int clipIndex, float volume)
@@ -52,70 +46,128 @@ public class AmbianceManager : MonoBehaviour
         {
             currentAudioSource = Instantiate(audioSourcePrefab, transform).GetComponent<AudioSource>();
             currentAudioSource.clip = ambianceClips[clipIndex];
+            currentAudioSource.loop = true;
+            currentAudioSource.Play();
+            currentAudioSource.volume = 0f;
+            StartCoroutine(FadeIn(currentAudioSource, volume));
+        }
+        else
+        {
+            StartCoroutine(SwitchAmbiance(clipIndex, volume));
+        }
+    }
+
+    private IEnumerator FadeOut(AudioSource source, float targetVolume)
+    {
+        float startTime = Time.time;
+        float startVolume = source.volume;
+
+        while (Time.time - startTime < fadeTime)
+        {
+            float elapsed = Time.time - startTime;
+            source.volume = Mathf.Lerp(startVolume, targetVolume, elapsed / fadeTime);
+            yield return null;
         }
 
-        if (currentAudioSource.clip == ambianceClips[clipIndex] && currentAudioSource.isPlaying)
-            return;
+        source.volume = targetVolume;
+    }
 
+    private IEnumerator SwitchAmbiance(int clipIndex, float volume)
+    {
         AudioSource newAudioSource = Instantiate(audioSourcePrefab, transform).GetComponent<AudioSource>();
         newAudioSource.clip = ambianceClips[clipIndex];
-        newAudioSource.volume = 0f; // Set to 0 before starting Crossfade.
+        newAudioSource.loop = true;
         newAudioSource.Play();
-        StartCoroutine(Crossfade(currentAudioSource, newAudioSource, volume));
+        newAudioSource.volume = 0f;
+
+        // Start fading in the new clip and fading out the old clip simultaneously
+        StartCoroutine(FadeIn(newAudioSource, volume));
+        StartCoroutine(FadeOut(currentAudioSource, 0f));
+
+        // Wait for the old clip to finish fading out before destroying it
+        yield return new WaitForSeconds(fadeTime);
+        Destroy(currentAudioSource.gameObject);
+
+        // Assign the new audio source as the current audio source
+        currentAudioSource = newAudioSource;
+    }
+
+    private IEnumerator ManageLoopingAmbiance(AudioSource source, float volume)
+    {
+        while (source.isPlaying)
+        {
+            if (source.clip.length - source.time <= leadTime + fadeTime && nextAudioSource == null)
+            {
+                nextAudioSource = Instantiate(audioSourcePrefab, transform).GetComponent<AudioSource>();
+                nextAudioSource.clip = source.clip;
+                nextAudioSource.PlayScheduled(AudioSettings.dspTime + source.clip.length - source.time - (leadTime + fadeTime / 2.0f));
+                nextAudioSource.volume = 0f;
+                StartCoroutine(Crossfade(source, nextAudioSource, volume));
+            }
+            yield return null;
+        }
+
+        Destroy(source.gameObject);
+        if (source == currentAudioSource)
+        {
+            currentAudioSource = nextAudioSource;
+            nextAudioSource = null;
+            if (currentAudioSource != null)
+            {
+                currentAudioSource.loop = true; // Set the next audio source to loop
+                StartCoroutine(ManageLoopingAmbiance(currentAudioSource, volume));
+            }
+        }
+    }
+
+    private IEnumerator FadeIn(AudioSource source, float targetVolume)
+    {
+        float startTime = Time.time;
+        while (Time.time - startTime < fadeTime)
+        {
+            float t = (Time.time - startTime) / fadeTime;
+            source.volume = t * targetVolume;
+            yield return null;
+        }
+        source.volume = targetVolume;
     }
 
     private IEnumerator Crossfade(AudioSource oldSource, AudioSource newSource, float targetVolume)
     {
         float startTime = Time.time;
-        float startVolume = oldSource.volume;
-
         while (Time.time - startTime < fadeTime)
         {
-            float elapsed = Time.time - startTime;
-            oldSource.volume = Mathf.Lerp(startVolume, 0f, elapsed / fadeTime);
-            newSource.volume = Mathf.Lerp(0f, targetVolume, elapsed / fadeTime); // Lerp to targetVolume instead of startVolume
+            float t = (Time.time - startTime) / fadeTime;
+            oldSource.volume = (1 - t) * targetVolume;
+            newSource.volume = t * targetVolume;
             yield return null;
         }
-        newSource.volume = targetVolume;
-
-        oldSource.Stop();
-        Destroy(oldSource.gameObject);
-        currentAudioSource = newSource;
     }
 
     public void FadeOutAndDestroyAll()
     {
-        // If there's no current audio source, there's nothing to fade out or destroy
-        if (currentAudioSource == null)
-            return;
+        // Stop and fade out all existing AudioSources
+        StopCoroutine(ManageLoopingAmbiance(currentAudioSource, currentAudioSource.volume));
+        if (nextAudioSource != null) StopCoroutine(Crossfade(currentAudioSource, nextAudioSource, nextAudioSource.volume));
 
-        StartCoroutine(FadeOutAndDestroyCoroutine());
+        StartCoroutine(FadeOutAndDestroyCoroutine(currentAudioSource));
+        if (nextAudioSource != null) StartCoroutine(FadeOutAndDestroyCoroutine(nextAudioSource));
     }
 
-    private IEnumerator FadeOutAndDestroyCoroutine()
+    private IEnumerator FadeOutAndDestroyCoroutine(AudioSource source)
     {
         float startTime = Time.time;
-        float startVolume = currentAudioSource.volume;
+        float startVolume = source.volume;
 
         while (Time.time - startTime < fadeTime)
         {
             float elapsed = Time.time - startTime;
-            currentAudioSource.volume = Mathf.Lerp(startVolume, 0f, elapsed / fadeTime);
+            source.volume = Mathf.Lerp(startVolume, 0f, elapsed / fadeTime);
             yield return null;
         }
 
-        // Stop and destroy the current audio source
-        currentAudioSource.Stop();
-        Destroy(currentAudioSource.gameObject);
-        currentAudioSource = null;
-
-        // Find and destroy any remaining AudioSource components under AmbianceManager
-        foreach (var audioSource in GetComponentsInChildren<AudioSource>())
-        {
-            Destroy(audioSource.gameObject);
-        }
+        Destroy(source.gameObject);
+        if (source == currentAudioSource) currentAudioSource = null;
+        if (source == nextAudioSource) nextAudioSource = null;
     }
-
-
-
 }

@@ -6,8 +6,10 @@ public class ItemSpawner : MonoBehaviour
     public static ItemSpawner Instance;
 
     public GameObject logPrefab; // Drag your item prefab here in the inspector
-    public float spawnInterval = 3.0f; // Time between each spawn in seconds
+    public float spawnInterval; // Time between each spawn in seconds
+    public float startingSpawnInterval = 3.5f;
     public float intervalIncreaseFactor;
+    public float slowFactor = 1f;
 
     private Vector2 topLeft = new Vector2(-13.5f, 8.5f);
     private Vector2 bottomRight = new Vector2(14.5f, -5.5f);
@@ -56,7 +58,7 @@ public class ItemSpawner : MonoBehaviour
         while (true)
         {
             float elapsedTime = TimeManager.Instance.GetElapsedTime();
-            spawnInterval = 3.0f + Mathf.Log10(1.0f + elapsedTime / intervalIncreaseFactor);
+            spawnInterval = (startingSpawnInterval + Mathf.Log10(1.0f + elapsedTime / intervalIncreaseFactor)) * slowFactor;
 
             // Wait for the next spawn interval
             yield return new WaitForSeconds(spawnInterval);
@@ -97,7 +99,10 @@ public class ItemSpawner : MonoBehaviour
         }
     }
 
-
+    public void AdjustSpawnIntervalWithMultiplier(float multiplier)
+    {
+        slowFactor -= multiplier;
+    }
 
     public void MarkPositionAsFree(int x, int y)
     {

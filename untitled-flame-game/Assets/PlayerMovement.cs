@@ -118,6 +118,11 @@ public class PlayerMovement : MonoBehaviour
         isUnderWindEffect = false;
     }
 
+    public void IncreaseSpeed(float multiplier)
+    {
+        moveSpeed *= multiplier; // Increase the speed by the given multiplier
+    }
+
     private void HandleAnim()
     {
         switch (currentState)
@@ -156,6 +161,11 @@ public class PlayerMovement : MonoBehaviour
                 break;
 
         }
+    }
+
+    public void ChangeWindForce(float multiplier)
+    {
+        windForce *= multiplier;
     }
 
     // Function to change player state

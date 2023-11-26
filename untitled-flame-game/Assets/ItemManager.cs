@@ -4,7 +4,7 @@ public class ItemManager : MonoBehaviour
 {
     public static ItemManager Instance; // Singleton instance
 
-    public int maxLogs = 10; // Maximum number of logs that can be obtained
+    public int maxLogs = 5; // Maximum number of logs that can be obtained
 
     private int logCount = 0; // Counter for logs collected
 
@@ -30,6 +30,11 @@ public class ItemManager : MonoBehaviour
         // DontDestroyOnLoad(gameObject);
     }
 
+    public void IncrementMaxLogs(int amount)
+    {
+        maxLogs += amount;
+    }
+
     // Attempt to increment the log count; return false if max is reached
     public bool TryIncrementLogCount()
     {
@@ -40,6 +45,19 @@ public class ItemManager : MonoBehaviour
         }
         else { 
             return false; // Increment failed; max count reached
+        }
+    }
+
+    public bool TryDecreaseLogCount(int amount)
+    {
+        if (logCount >= amount)
+        {
+            logCount -= amount; // Decrease was successful
+            return true;
+        }
+        else
+        {
+            return false; // Decrease failed; not enough logs
         }
     }
 

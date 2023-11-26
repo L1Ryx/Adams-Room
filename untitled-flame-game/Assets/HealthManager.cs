@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class HealthManager : MonoBehaviour
 {
@@ -15,10 +16,14 @@ public class HealthManager : MonoBehaviour
     public Sprite halfHeartSprite; // Sprite for half heart
     public Sprite emptyHeartSprite; // Sprite for empty heart
 
+    public float invincibilityTime = 1.0f; // Duration of invincibility
+    private bool isInvincible = false; // Flag to check if the player is currently invincible
+    public SpriteRenderer playerSprite; // Reference to the player's sprite renderer
+
 
     private void Awake()
     {
-        // Ensure that there's only one instance of this class
+        /// Ensure that there's only one instance of this class
         if (Instance == null)
         {
             Instance = this;
@@ -32,19 +37,55 @@ public class HealthManager : MonoBehaviour
         // Initialize hitpoints to max hitpoints at start
         hitPoints = maxHitPoints;
         UpdateHeartUI();
+
+        // Find the player's sprite renderer
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
+        {
+            playerSprite = player.GetComponent<SpriteRenderer>();
+            if (playerSprite == null)
+            {
+                Debug.LogError("HealthManager: No SpriteRenderer found on the player.");
+            }
+        }
+        else
+        {
+            Debug.LogError("HealthManager: Player not found.");
+        }
     }
 
     // Method to reduce hitpoints
     public void TakeDamage(int damage)
     {
+        if (isInvincible)
+            return;
+
         hitPoints -= damage;
-        hitPoints = Mathf.Clamp(hitPoints, 0, maxHitPoints); // Ensures hitpoints do not go below 0 or above max
+        hitPoints = Mathf.Clamp(hitPoints, 0, maxHitPoints);
         UpdateHeartUI();
-        // Check for player death
+
         if (hitPoints <= 0)
         {
             PlayerDied();
         }
+        else
+        {
+            StartCoroutine(InvincibilityRoutine());
+        }
+    }
+
+    private IEnumerator InvincibilityRoutine()
+    {
+        isInvincible = true;
+        float endTime = Time.time + invincibilityTime;
+        while (Time.time < endTime)
+        {
+            // Toggle the sprite's visibility
+            playerSprite.enabled = !playerSprite.enabled;
+            yield return new WaitForSeconds(0.1f);
+        }
+        playerSprite.enabled = true; // Ensure sprite is visible after invincibility ends
+        isInvincible = false;
     }
 
     // Method to heal the player
@@ -59,8 +100,9 @@ public class HealthManager : MonoBehaviour
     private void PlayerDied()
     {
         AmbianceManager.Instance.FadeOutAndDestroyAll();
+        EnemySpawnManager.Instance.SetFireIsOut(false);
         TimeManager.Instance.shouldShowResults = true;
-        Debug.Log("Player Died");
+        
     }
 
     // Additional methods for health management can be added here

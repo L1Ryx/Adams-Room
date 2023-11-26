@@ -52,12 +52,31 @@ public class GhostChase : MonoBehaviour
         if (player != null && !isKnockedBack)
         {
             Vector2 targetPosition = player.transform.position;
-            Vector2 moveDirection = (targetPosition - new Vector2(transform.position.x, transform.position.y)).normalized;
+            Vector2 currentPosition = transform.position;
+            Vector2 moveDirection = (targetPosition - currentPosition).normalized;
             float noise = Mathf.PerlinNoise(Time.time * noiseSpeed + noiseOffset, 0f) * 2f - 1f; // Noise value between -1 and 1
 
             // Apply noise to movement
             moveDirection += new Vector2(moveDirection.y, -moveDirection.x) * noise * noiseStrength;
             rb.velocity = moveDirection * speed;
+
+            // Update the facing direction based on the movement
+            UpdateFacingDirection(currentPosition, targetPosition);
+        }
+    }
+
+    private void UpdateFacingDirection(Vector2 currentPosition, Vector2 targetPosition)
+    {
+        bool isMovingRight = targetPosition.x > currentPosition.x;
+        if (isMovingRight)
+        {
+            // Face right
+            transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+        }
+        else
+        {
+            // Face left
+            transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
         }
     }
 

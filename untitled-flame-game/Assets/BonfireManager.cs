@@ -56,7 +56,7 @@ public class BonfireManager : MonoBehaviour
 
     private void HandleLogAdding()
     {
-        if (canAddLogs && Input.GetKeyDown(KeyCode.F) && currentState == BonfireState.Lit)
+        if (canAddLogs && Input.GetKeyDown(KeyCode.F))
         {
             AddLogsToFire();
         }
@@ -121,6 +121,11 @@ public class BonfireManager : MonoBehaviour
         {
             bonfireValue -= Time.deltaTime * decreaseRate;
         }
+
+        if (bonfireValue <= 0)
+        {
+            bonfireValue = 0;
+        }
     }
 
     private void HandleStates()
@@ -143,13 +148,15 @@ public class BonfireManager : MonoBehaviour
                     audioSource.Pause();
                     audioSource.Play();
                 }
+                EnemySpawnManager.Instance.SetFireIsOut(false);
                 break;
             case BonfireState.Out:
                 anim.SetBool("isLit", false);
                 lightSource.SetActive(false);
-                pressFCanvas.SetActive(false);
+                //pressFCanvas.SetActive(false);
                 smokeSystem.SetActive(false);
-                EndGame();
+                EnemySpawnManager.Instance.SetFireIsOut(true);
+                //EndGame();
                 break;
         }
     }

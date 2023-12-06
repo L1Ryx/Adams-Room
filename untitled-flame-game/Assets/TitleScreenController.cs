@@ -24,11 +24,16 @@ public class TitleScreenManager : MonoBehaviour
     [SerializeField] private int clipIdx = 3;
     [SerializeField] private float titleAmbianceVolume = 0.95f;
 
-   
+    [Header("Shop")]
+    [SerializeField] private GameObject shopObject;
 
     void Start()
     {
+        TimeManager.Instance.ResetElapsedTime();
+        TimeManager.Instance.ResetLogCount();
+        FadeManager.Instance.FadeIn();
         isStarting = false;
+        TimeManager.Instance.ResumeTimer();
         AmbianceManager.Instance.PlayAmbiance(clipIdx, titleAmbianceVolume);
         tmp = startText.GetComponent<TextMeshProUGUI>();
         startText.gameObject.SetActive(false); // Initially set to false.
@@ -38,9 +43,23 @@ public class TitleScreenManager : MonoBehaviour
         {
             Debug.Log("You survived for " + TimeManager.Instance.score);
             Debug.Log("Your best time is " + HighScoreManager.Instance.GetHighScore());
-        } 
+        }
 
+        CheckShopUnlockStatus();
         StartCoroutine(EnableStart());
+    }
+
+    private void CheckShopUnlockStatus()
+    {
+        bool isShopUnlocked = PlayerPrefs.GetInt("shopUnlocked", 0) == 1;
+        if (shopObject != null)
+        {
+            shopObject.SetActive(isShopUnlocked);
+        }
+        else
+        {
+            Debug.LogError("Shop object is not assigned in the TitleScreenManager.");
+        }
     }
 
     private IEnumerator EnableStart()
@@ -94,6 +113,7 @@ public class TitleScreenManager : MonoBehaviour
             isStarting = true;
             AmbianceManager.Instance.FadeOutAndDestroyAll();
             FadeManager.Instance.LoadSceneWithFade(sceneLoadName, false);
+            TimeManager.Instance.ResetElapsedTime();
             isStarting = false;
         }
     }

@@ -8,13 +8,17 @@ public class ScoreReportText : MonoBehaviour
     [Header("References")]
     [SerializeField] private GameObject scoreTextObj;
     [SerializeField] private GameObject highScoreTextObj;
+    [SerializeField] private GameObject logsGainedTextObj;
+    [SerializeField] private GameObject logsImageObj;
     [SerializeField] private TextMeshProUGUI scoreTMP;
     [SerializeField] private TextMeshProUGUI highScoreTMP;
+    [SerializeField] private TextMeshProUGUI logsGainedTMP;
     // Start is called before the first frame update
     void Start()
     {
         scoreTMP = scoreTextObj.GetComponent<TextMeshProUGUI>();
         highScoreTMP = highScoreTextObj.GetComponent<TextMeshProUGUI>();
+        logsGainedTMP = logsGainedTextObj.GetComponent<TextMeshProUGUI>();
         ShowScoreReport();
     }
 
@@ -22,13 +26,19 @@ public class ScoreReportText : MonoBehaviour
     {
         if (TimeManager.Instance.shouldShowResults)
         {
-            scoreTMP.text = "Adam lasted for " + ConvertToTime(TimeManager.Instance.score);
+            scoreTMP.text = "Adam dreamed for " + ConvertToTime(TimeManager.Instance.score);
             scoreTextObj.SetActive(true);
+            logsGainedTMP.text = "Gained " + TimeManager.Instance.GetLogCount().ToString();
+            logsGainedTextObj.SetActive(true);
+            logsImageObj.SetActive(true);
         }
         else
         {
             scoreTMP.text = "";
             scoreTextObj.SetActive(false);
+            logsGainedTMP.text = "";
+            logsGainedTextObj.SetActive(false);
+            logsImageObj.SetActive(false);
         }
         TimeManager.Instance.shouldShowResults = false;
         TimeManager.Instance.transitioningToResults = false;

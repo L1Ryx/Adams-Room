@@ -112,8 +112,8 @@ MonoBehaviour:
   speed: 3.5
   noiseStrength: 1
   noiseSpeed: 2.5
-  maxHitPoints: 3
-  knockbackStrength: 1000
+  maxHitPoints: 2
+  knockbackStrength: 10
   knockbackDuration: 0.5
 --- !u!1 &4510088327242340693
 GameObject:

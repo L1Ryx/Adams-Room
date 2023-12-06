@@ -18,7 +18,7 @@ public class AmbianceManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
+            //DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -47,8 +47,8 @@ public class AmbianceManager : MonoBehaviour
             currentAudioSource = Instantiate(audioSourcePrefab, transform).GetComponent<AudioSource>();
             currentAudioSource.clip = ambianceClips[clipIndex];
             currentAudioSource.loop = true;
+            currentAudioSource.volume = 0f; // Ensure volume is 0 before playing
             currentAudioSource.Play();
-            currentAudioSource.volume = 0f;
             StartCoroutine(FadeIn(currentAudioSource, volume));
         }
         else
@@ -57,14 +57,17 @@ public class AmbianceManager : MonoBehaviour
         }
     }
 
+
     private IEnumerator FadeOut(AudioSource source, float targetVolume)
     {
+        
         float startTime = Time.time;
         float startVolume = source.volume;
 
         while (Time.time - startTime < fadeTime)
         {
             float elapsed = Time.time - startTime;
+            if (source == null) yield break; // Add this check
             source.volume = Mathf.Lerp(startVolume, targetVolume, elapsed / fadeTime);
             yield return null;
         }
@@ -86,7 +89,13 @@ public class AmbianceManager : MonoBehaviour
 
         // Wait for the old clip to finish fading out before destroying it
         yield return new WaitForSeconds(fadeTime);
-        Destroy(currentAudioSource.gameObject);
+
+        if (currentAudioSource != null)
+        {
+            StartCoroutine(FadeOut(currentAudioSource, 0f));
+            yield return new WaitForSeconds(fadeTime);
+            Destroy(currentAudioSource.gameObject);
+        }
 
         // Assign the new audio source as the current audio source
         currentAudioSource = newAudioSource;
@@ -132,6 +141,7 @@ public class AmbianceManager : MonoBehaviour
         source.volume = targetVolume;
     }
 
+
     private IEnumerator Crossfade(AudioSource oldSource, AudioSource newSource, float targetVolume)
     {
         float startTime = Time.time;
@@ -146,26 +156,34 @@ public class AmbianceManager : MonoBehaviour
 
     public void FadeOutAndDestroyAll()
     {
-        // Stop and fade out all existing AudioSources
-        StopCoroutine(ManageLoopingAmbiance(currentAudioSource, currentAudioSource.volume));
-        if (nextAudioSource != null) StopCoroutine(Crossfade(currentAudioSource, nextAudioSource, nextAudioSource.volume));
+        if (currentAudioSource != null)
+        {
+            StopCoroutine(ManageLoopingAmbiance(currentAudioSource, currentAudioSource.volume));
+            StartCoroutine(FadeOutAndDestroyCoroutine(currentAudioSource));
+        }
 
-        StartCoroutine(FadeOutAndDestroyCoroutine(currentAudioSource));
-        if (nextAudioSource != null) StartCoroutine(FadeOutAndDestroyCoroutine(nextAudioSource));
+        if (nextAudioSource != null)
+        {
+            StopCoroutine(Crossfade(currentAudioSource, nextAudioSource, nextAudioSource.volume));
+            StartCoroutine(FadeOutAndDestroyCoroutine(nextAudioSource));
+        }
     }
+
 
     private IEnumerator FadeOutAndDestroyCoroutine(AudioSource source)
     {
+        
         float startTime = Time.time;
         float startVolume = source.volume;
 
         while (Time.time - startTime < fadeTime)
         {
             float elapsed = Time.time - startTime;
+            if (source == null) yield break;
             source.volume = Mathf.Lerp(startVolume, 0f, elapsed / fadeTime);
             yield return null;
         }
-
+        if (source == null) yield break;
         Destroy(source.gameObject);
         if (source == currentAudioSource) currentAudioSource = null;
         if (source == nextAudioSource) nextAudioSource = null;

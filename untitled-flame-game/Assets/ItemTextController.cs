@@ -32,13 +32,26 @@ public class ItemTextController : MonoBehaviour
         subText.alpha = 0;
     }
 
-    public void ShowItemText(string acquired, string item, string sub)
+    public void ShowItemText(string acquired, string item, string sub, bool isStoryItem)
     {
+        // Set the color based on whether it's a story item, preserving alpha
+        Color textColor = isStoryItem ? new Color(197f / 255f, 51f / 255f, 33f / 255f) : new Color(108f / 255f, 147f / 255f, 48f / 255f);
+
+        SetTextColorWithAlphaPreserved(acquiredText, textColor);
+        SetTextColorWithAlphaPreserved(itemText, textColor);
+        SetTextColorWithAlphaPreserved(subText, textColor);
+
         acquiredText.text = acquired;
         itemText.text = item;
         subText.text = sub;
 
         StartCoroutine(ShowSequence());
+    }
+
+    private void SetTextColorWithAlphaPreserved(TextMeshProUGUI textMesh, Color color)
+    {
+        float alpha = textMesh.color.a; // Preserve current alpha value
+        textMesh.color = new Color(color.r, color.g, color.b, alpha);
     }
 
     private IEnumerator ShowSequence()

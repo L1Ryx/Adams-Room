@@ -15,8 +15,23 @@ public class PlayerMovement : MonoBehaviour
         WalkingLeft,
         WalkingRight,
         WalkingUp,
-        WalkingDown
+        WalkingDown,
+        Stomping
     }
+
+    [Header("Shockwave Spawn Points")]
+    [SerializeField] private Transform shockwaveSpawnPointUp;
+    [SerializeField] private Transform shockwaveSpawnPointDown;
+    [SerializeField] private Transform shockwaveSpawnPointLeft;
+    [SerializeField] private Transform shockwaveSpawnPointRight;
+
+    [Header("Stomp Attack")]
+    [SerializeField] private GameObject shockwavePrefabUp;
+    [SerializeField] private GameObject shockwavePrefabDown;
+    [SerializeField] private GameObject shockwavePrefabLeft;
+    [SerializeField] private GameObject shockwavePrefabRight;
+    [SerializeField] private float stompCooldown = 1f; // Cooldown time for stomp attack
+    private float stompCooldownTimer = 0f;
 
     public PlayerState currentState;  // Variable to keep track of the current player state
     private PlayerState lastDirection; // Variable to keep track of the last direction moved
@@ -32,6 +47,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float stepTime = 0.3f;
     private float nextStepTime;
 
+    [Header("StompSFX")]
+    [SerializeField] private float stompVolume = 0.5f;
+
     void Start()
     {
         anim = GetComponent<Animator>();
@@ -39,34 +57,60 @@ public class PlayerMovement : MonoBehaviour
         ChangeState(PlayerState.IdleForward);  // Initialize with Idle state
     }
 
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space) && currentState != PlayerState.Stomping)
+        {
+            StompAttack();
+        }
+    }
+
+
     void FixedUpdate()
+    {
+        if (currentState != PlayerState.Stomping)
+        {
+            HandleMovement();
+            HandleWindEffect();
+        }
+        else
+        {
+            rb.velocity = Vector2.zero; // Ensure the player stops moving while stomping
+        }
+
+        HandleAnim(); // Update animations based on the current state
+    }
+
+    private void HandleMovement()
     {
         float moveX = Input.GetAxis("Horizontal");
         float moveY = Input.GetAxis("Vertical");
 
         Vector2 move = new Vector2(moveX, moveY);
-
         if (move.sqrMagnitude > 1)
         {
             move.Normalize();
         }
 
         ChangeStateBasedOnMovement(moveX, moveY);
-
-        rb.velocity = new Vector2(move.x * moveSpeed, move.y * moveSpeed);
-        if (isUnderWindEffect)
-        {
-            rb.AddForce(windDirection * windForce); // Apply wind effect continuously
-        }
-
-        HandleAnim();
+        rb.velocity = move * moveSpeed;
 
         if (IsWalking() && Time.time >= nextStepTime)
         {
-            SFXManager.Instance.PlayFootstepSound(transform.position); // Play footstep sound at player’s position
-            nextStepTime = Time.time + stepTime; // Schedule the next footstep sound
+            SFXManager.Instance.PlayFootstepSound(transform.position);
+            nextStepTime = Time.time + stepTime;
         }
     }
+
+    private void HandleWindEffect()
+    {
+        if (isUnderWindEffect)
+        {
+            rb.AddForce(windDirection * windForce);
+        }
+    }
+
+
 
     private void ChangeStateBasedOnMovement(float moveX, float moveY)
     {
@@ -110,6 +154,95 @@ public class PlayerMovement : MonoBehaviour
         windDirection = direction;
         isUnderWindEffect = true;
         StartCoroutine(StopWindEffectAfterDuration());
+    }
+
+    public void StompAttack()
+    {
+        ChangeState(PlayerState.Stomping);
+        anim.SetBool("isStomping", true);
+        anim.SetTrigger("stomp" + GetDirectionSuffix(lastDirection)); // Triggers the correct directional stomp animation
+    }
+
+    public void CreateShockwaveFromAnim()
+    {
+        CreateShockwave();
+    }
+
+    public void EndStomp()
+    {
+        anim.SetBool("isStomping", false);
+        ChangeState(lastDirection); // Return to the last idle or movement state
+    }
+
+    public void CreateShockwave()
+    {
+        SFXManager.Instance.PlaySFX(9, stompVolume);
+        GameObject shockwavePrefab = GetShockwavePrefab(lastDirection);
+        Transform spawnPoint = GetShockwaveSpawnPoint(lastDirection);
+        Instantiate(shockwavePrefab, spawnPoint.position, spawnPoint.rotation);
+    }
+
+    private Transform GetShockwaveSpawnPoint(PlayerState direction)
+    {
+        switch (direction)
+        {
+            case PlayerState.IdleBack:
+            case PlayerState.WalkingUp:
+                return shockwaveSpawnPointUp;
+            case PlayerState.IdleForward:
+            case PlayerState.WalkingDown:
+                return shockwaveSpawnPointDown;
+            case PlayerState.IdleLeft:
+            case PlayerState.WalkingLeft:
+                return shockwaveSpawnPointLeft;
+            case PlayerState.IdleRight:
+            case PlayerState.WalkingRight:
+                return shockwaveSpawnPointRight;
+            default:
+                return shockwaveSpawnPointDown; // Default to down if unsure
+        }
+    }
+
+    private GameObject GetShockwavePrefab(PlayerState direction)
+    {
+        switch (direction)
+        {
+            case PlayerState.IdleBack:
+            case PlayerState.WalkingUp:
+                return shockwavePrefabUp;
+            case PlayerState.IdleForward:
+            case PlayerState.WalkingDown:
+                return shockwavePrefabDown;
+            case PlayerState.IdleLeft:
+            case PlayerState.WalkingLeft:
+                return shockwavePrefabLeft;
+            case PlayerState.IdleRight:
+            case PlayerState.WalkingRight:
+                return shockwavePrefabRight;
+            default:
+                return shockwavePrefabDown; // Default to down if unsure
+        }
+    }
+
+    private string GetDirectionSuffix(PlayerState direction)
+    {
+        switch (direction)
+        {
+            case PlayerState.IdleBack:
+            case PlayerState.WalkingUp:
+                return "Up";
+            case PlayerState.IdleForward:
+            case PlayerState.WalkingDown:
+                return "Down";
+            case PlayerState.IdleLeft:
+            case PlayerState.WalkingLeft:
+                return "Left";
+            case PlayerState.IdleRight:
+            case PlayerState.WalkingRight:
+                return "Right";
+            default:
+                return "Down"; // Default to down if unsure
+        }
     }
 
     IEnumerator StopWindEffectAfterDuration()

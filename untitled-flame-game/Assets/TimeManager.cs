@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections;
+using System;
 
 public class TimeManager : MonoBehaviour
 {
@@ -13,8 +15,17 @@ public class TimeManager : MonoBehaviour
     public bool transitioningToResults = false;
     [SerializeField] private string sceneToLoad = "StartScene";
 
+    [Header("Cutscene")]
+    public bool shouldShowCutscene = false;
+    private bool transitioningToCutscene = false;
+    [SerializeField] private string cutsceneToLoad = "movieCutscene";
+
     [Header("Score")]
     public int score;
+    public int logs;
+
+    [Header("Bonfire")]
+    public int logCount; // Number of logs collected
 
     void Awake()
     {
@@ -35,6 +46,17 @@ public class TimeManager : MonoBehaviour
         // DontDestroyOnLoad(gameObject);
     }
 
+    public void AddLog(int logsToAdd)
+    {
+        logCount += logsToAdd;
+    }
+
+    // Method to get the current number of logs
+    public int GetLogCount()
+    {
+        return logs;
+    }
+
     private void OnDestroy()
     {
         SceneManager.sceneLoaded -= SceneManager_sceneLoaded;
@@ -42,7 +64,13 @@ public class TimeManager : MonoBehaviour
 
     private void SceneManager_sceneLoaded(Scene arg0, LoadSceneMode arg1)
     {
-        ResetElapsedTime();
+        //ResetElapsedTime();
+        //ResetLogCount();
+    }
+
+    public void ResetLogCount()
+    {
+        logCount = 0;
     }
 
     private void Start()
@@ -67,6 +95,37 @@ public class TimeManager : MonoBehaviour
         {
             Time.timeScale = 1;
         }
+
+        ShopDebug();
+    }
+
+    private void ShopDebug()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha8))
+        {
+            PlayerPrefs.SetInt("shopUnlocked", 0);
+            PlayerPrefs.Save();
+            Debug.Log("Shop locked (shopUnlocked set to 0)");
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha9))
+        {
+            PlayerPrefs.SetInt("shopUnlocked", 1);
+            PlayerPrefs.Save();
+            Debug.Log("Shop unlocked (shopUnlocked set to 1)");
+        }
+    }
+
+
+    public void TriggerCutsceneWithDelay(float delay)
+    {
+        StartCoroutine(TriggerCutsceneAfterDelay(delay));
+    }
+
+    private IEnumerator TriggerCutsceneAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        Debug.Log("shouldShowCutscene is true");
+        shouldShowCutscene = true;
     }
 
     private void HandleDeath()
@@ -75,10 +134,22 @@ public class TimeManager : MonoBehaviour
         {
             transitioningToResults = true;
             score = Mathf.FloorToInt(elapsedTime);
+            logs = logCount;
             HighScoreManager.Instance.SetHighScore(score);
             FadeManager.Instance.LoadSceneWithFade(sceneToLoad, false);
         }
+        if (shouldShowCutscene && !transitioningToCutscene)
+        {
+            //isPaused = true;
+            Debug.Log("transitioning to cutscene");
+            score = Mathf.FloorToInt(elapsedTime);
+            logs = logCount;
+            transitioningToCutscene = true;
+            FadeManager.Instance.LoadSceneWithFade(cutsceneToLoad, false);
+        }
     }
+
+    
 
     // Get the elapsed time
     public float GetElapsedTime()

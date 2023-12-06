@@ -60,7 +60,7 @@ public class EventManager : MonoBehaviour
 
     private void Start()
     {
-        
+        FadeManager.Instance.FadeIn();
         player = GameObject.FindWithTag("Player");
         pm = player.GetComponent<PlayerMovement>();
         lightComponent = globalLight.GetComponent<Light2D>();

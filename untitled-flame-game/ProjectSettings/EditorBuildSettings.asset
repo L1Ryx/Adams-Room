@@ -11,6 +11,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/WhiteboxScene.unity
     guid: a4689769da7884591ad986c242a21660
+  - enabled: 1
+    path: Assets/Scenes/movieCutscene.unity
+    guid: b2bc2f8ba8d7a477fba58d46feb7a912
   m_configObjects:
     com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: d7afef0b6f6404422bd2b7ae6df213c9, type: 2}
     com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000, guid: 11f926337d87d4d98b8bd27f66be9ce9, type: 2}

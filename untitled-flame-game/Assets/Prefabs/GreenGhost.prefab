@@ -301,6 +301,6 @@ MonoBehaviour:
   speed: 2
   noiseStrength: 1
   noiseSpeed: 2
-  maxHitPoints: 3
-  knockbackStrength: 1000
+  maxHitPoints: 2
+  knockbackStrength: 10
   knockbackDuration: 0.5

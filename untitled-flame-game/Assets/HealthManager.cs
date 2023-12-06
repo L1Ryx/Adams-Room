@@ -20,6 +20,8 @@ public class HealthManager : MonoBehaviour
     private bool isInvincible = false; // Flag to check if the player is currently invincible
     public SpriteRenderer playerSprite; // Reference to the player's sprite renderer
 
+    [Header("SFX")]
+    [SerializeField] private float hurtVolume = 0.3f;
 
     private void Awake()
     {
@@ -63,6 +65,7 @@ public class HealthManager : MonoBehaviour
         hitPoints -= damage;
         hitPoints = Mathf.Clamp(hitPoints, 0, maxHitPoints);
         UpdateHeartUI();
+        SFXManager.Instance.PlaySFX(10, hurtVolume);
 
         if (hitPoints <= 0)
         {

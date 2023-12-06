@@ -77,6 +77,7 @@ public class BonfireManager : MonoBehaviour
         }
         float valueToAdd = logsToAdd * ItemManager.Instance.GetBonfireAddAmount(); // For example, each log adds 5 to bonfireValue
         AddBonfireValue(valueToAdd);
+        TimeManager.Instance.AddLog(logsToAdd);
         ItemManager.Instance.ResetLogCount(); // Reset the log count
     }
 

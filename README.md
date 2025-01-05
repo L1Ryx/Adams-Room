@@ -1,5 +1,5 @@
 # Adam's Room
-Adam's Room is a rogue-like survival game set in a single forest clearing, blending eerie atmosphere and escalating tension. Your only goal: collect logs scattered around the map to keep the fire in the center burning. If the fire goes out, so do you. Each playthrough offers unique combinations of merchant items and hazardous events. The longer you survive, the weirder and more challenging the events become.
+Adam's Room is a survival game set in a single forest clearing with rogue-like elements. Your only goal: collect logs scattered around the map to keep the fire in the center burning. If the fire goes out, so do you. Each playthrough offers unique combinations of merchant items and hazardous events. The longer you survive, the weirder and more challenging the events become.
 ![Screenshot](https://imgur.com/zxOBbAA.png)
 
 ## Gameplay

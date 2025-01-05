@@ -12,6 +12,6 @@ Adam's Room is a survival game set in a single forest clearing with rogue-like e
 View a demo video [here](https://youtu.be/_hSjNKDpxdY). A playable build is in the works.
 
 ## Credits
-Merchant sprite was created by Avi Krishnan.
-All other visual assets and all audio assets were created by Shawn Guo.
+- Merchant sprite was created by Avi Krishnan.
+- All other visual assets and all audio assets were created by Shawn Guo.
 
